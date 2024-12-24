@@ -58,7 +58,7 @@ void Encrypt(int ascii[40],int ciphertext[40],int E,int T){
     if (public_key(E,T)==0){
 
     for(i=0;i<40;i++){
-        ciphertext[i]=(pow(ascii[i],E))%T;
+        ciphertext[i]=((int)pow(ascii[i],E))%T;
     }
     }
     else return 1;
@@ -74,7 +74,7 @@ void decrypt(int ciphertext[40],int ascii[40],int D,int n,int T,int E){
     int i;
     if( private_key(E,T,D)==0){
         for(i=0;i<40;i++){
-            ascii[i]=(pow(ciphertext[i],D))%n;
+            ascii[i]=((int)pow(ciphertext[i],D))%n;
         }
     }
 
