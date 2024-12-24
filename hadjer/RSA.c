@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdbool.h>
 #include <math.h>
+//this is RAS algorithm:Ravist-Shemir-Adelman// 
 void Ascii(char text[40],int ascii[40]){
     int i;
     for (i=0;i<40;i++){
