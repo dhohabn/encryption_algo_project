@@ -53,12 +53,12 @@ int Generating_keys(int q,int p){
     T=(p-1)*(q-1);//this totient is especially for semi prime numbers such that n=p*q with q!=p and q&p are prime numbers //
     return T,n;
 }
-void Encrypt(int ascii[40],int ciphertext[40],int E,int T){
+void Encrypt(int ascii[40],int ciphertext[40],int E,int T,int n){
     int i;
     if (public_key(E,T)==0){
 
     for(i=0;i<40;i++){
-        ciphertext[i]= ((int)pow(ascii[i],E))%T;
+        ciphertext[i]= modular_exponential_function(ascii[i],E,n);
     }
     }
     else return 1;
@@ -74,11 +74,28 @@ void decrypt(int ciphertext[40],int ascii[40],int D,int n,int T,int E){
     int i;
     if( private_key(E,T,D)==0){
         for(i=0;i<40;i++){
-            ascii[i]=((int)pow(ciphertext[i],D))%n;
+            ascii[i]=modular_exponential_function(ciphertext[i],D,n);
         }
     }
 
 
+}
+/*I created this version of the algorithm to calculate the modular exponentiation function 
+that already exists in the library math is not efficient when it comes to large numbers the algorithm that calculates it 
+is called exponentiation by squaring and it reduces the number of number of multiplications needed and does it in an logarithmic time 
+complexity*/
+int modular_exponential_function (int Message_or_ciphertext, int K,int n){
+    int mod=1;
+    Message_or_ciphertext=Message_or_ciphertext%n;
+    while (K>0){
+        if (K%2==1){
+            mod=(mod*Message_or_ciphertext)%n;
+        }
+        K=K/2;
+        Message_or_ciphertext=(Message_or_ciphertext*Message_or_ciphertext)%n;
+
+    }
+    return mod;
 }
 
 

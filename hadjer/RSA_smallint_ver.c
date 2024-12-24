@@ -53,12 +53,12 @@ int Generating_keys(int q,int p){
     T=(p-1)*(q-1);//this totient is especially for semi prime numbers such that n=p*q with q!=p and q&p are prime numbers //
     return T,n;
 }
-void Encrypt(int ascii[40],int ciphertext[40],int E,int T){
+void Encrypt(int ascii[40],int ciphertext[40],int E,int T,int n){
     int i;
     if (public_key(E,T)==0){
 
     for(i=0;i<40;i++){
-        ciphertext[i]=((int)pow(ascii[i],E))%T;
+        ciphertext[i]=((int)pow(ascii[i],E))%n;
     }
     }
     else return 1;
