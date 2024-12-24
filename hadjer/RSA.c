@@ -46,11 +46,11 @@ int public_key(int E,int T){
 }
 int Generating_keys(int q,int p){
     int n,T;
-    if(prime(p)==1 || prime(q)){
+    if(prime(p)==1 || prime(q)==1){
         printf("the number you just antered is not prime try another one ");
     }
     n=q*p; //semi prime number//
-    T=(p-1)*(q-1);
+    T=(p-1)*(q-1);//this totient is especially for semi prime numbers such that n=p*q with q!=p and q&p are prime numbers //
     return T,n;
 }
 void Encrypt(int ascii[40],int ciphertext[40],int E,int T){
@@ -58,7 +58,7 @@ void Encrypt(int ascii[40],int ciphertext[40],int E,int T){
     if (public_key(E,T)==0){
 
     for(i=0;i<40;i++){
-        ciphertext[i]=ascii[i]^E%T;
+        ciphertext[i]=(pow(ascii[i],E))%T;
     }
     }
     else return 1;
@@ -74,7 +74,7 @@ void decrypt(int ciphertext[40],int ascii[40],int D,int n,int T,int E){
     int i;
     if( private_key(E,T,D)==0){
         for(i=0;i<40;i++){
-            ascii[i]=(ciphertext[i]^D)%n;
+            ascii[i]=(pow(ciphertext[i],D))%n;
         }
     }
 
