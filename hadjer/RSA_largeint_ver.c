@@ -1,19 +1,20 @@
 #include<stdio.h>
 #include<stdbool.h>
 #include <math.h>
+#define max_s 50
 //this is RAS algorithm:Ravist-Shemir-Adelman// 
-void Ascii(char text[40],int ascii[40]){
+void Ascii(char text[max_s],int ascii[max_s]){
     int i;
-    for (i=0;i<40;i++){
+    for (i=0;i<max_s;i++){
         ascii[i]=(int)text[i];
        
     }
 
 
 }
-void Inv_Ascii(int ascii[40],char ciphertext[40]){
+void Inv_Ascii(int ascii[max_s],char ciphertext[max_s]){
 int i;
-for (i=0;i<40;i++){
+for (i=0;i<max_s;i++){
     ciphertext[i]=(char)ascii[i];
 }
 }
@@ -51,7 +52,6 @@ int public_key(int E,int T){
 
 }
 int Generating_keys(int q,int p,int*n,int*T){
-    int n,T;
     if(prime(p)==1 || prime(q)==1){
         printf("the number you just antered is not prime try another one ");
     }
@@ -77,11 +77,11 @@ int modular_exponential_function (int Message_or_ciphertext, int K,int n){
     return mod;
 }
 
-void Encrypt(int ascii[40],int ciphertext[40],int E,int T,int n){
+void Encrypt(int ascii[max_s],int ciphertext[max_s],int E,int T,int n){
     int i;
     if (public_key(E,T)==0){
 
-    for(i=0;i<40;i++){
+    for(i=0;i<max_s;i++){
         ciphertext[i]= modular_exponential_function(ascii[i],E,n);
     }
     }
@@ -93,25 +93,45 @@ int private_key(int E, int T,int D){
     }
     return 1;
 }
-void decrypt(int ciphertext[40],int ascii[40],int D,int n,int T,int E){
+void decrypt(int ciphertext[max_s],int ascii_decrypted_text[max_s],int D,int n,int T,int E){
     int i;
     if( private_key(E,T,D)==0){
-        for(i=0;i<40;i++){
-            ascii[i]=modular_exponential_function(ciphertext[i],D,n);
+        for(i=0;i<max_s;i++){
+            ascii_decrypted_text[i]=modular_exponential_function(ciphertext[i],D,n);
         }
     }
 }
 
 int main(){
-    char text[40]="This is the text i want to encrypt";
-    int i;
-    int ascii_of_text[40];
+    char text[max_s]="This is the text i want to encrypt";
+    int i,n,T,q,p,E,D;
+    q=61;
+    p=53;
+    E=17;
+    D=2753;
+    int ascii_of_text[max_s];
+    int ciphertext[max_s];
+    int ascii_decrypted_text[max_s];
+    char decrypted_text[max_s];
+     for(i=0;i<max_s;i++){
+    printf("%c",text[i]);
+     }
+    printf("\n");
     Ascii(text,ascii_of_text);
-    for (i=0;i<40;i++){
-        
-
+    Generating_keys(61,53,&n,&T);
+    Encrypt(ascii_of_text,ciphertext,E,T,n);
+    for(i=0;i<max_s;i++){
+        printf("%d",ascii_of_text[i]);
     }
-
-
+    printf("\n");
+    decrypt(ciphertext,ascii_decrypted_text,D,n,T,E);
+     for(i=0;i<max_s;i++){
+        printf("%d",ascii_decrypted_text[i]);
+    }
+    printf("\n");
+    Inv_Ascii(ascii_decrypted_text,decrypted_text);
+     for(i=0;i<max_s;i++){
+        printf("%c",decrypted_text[i]);
+    }
     return 0;
 }

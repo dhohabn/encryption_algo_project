@@ -1,10 +1,11 @@
 #include<stdio.h>
 #include<stdbool.h>
 #include <math.h>
+#define max_s 200
 //this is RAS algorithm:Ravist-Shemir-Adelman// 
-void Ascii(char text[40],int ascii[40]){
+void Ascii(char text[max_s],int ascii[max_s]){
     int i;
-    for (i=0;i<40;i++){
+    for (i=0;i<max_s;i++){
         ascii[i]=(int)text[i];
        
     }
@@ -44,24 +45,21 @@ int public_key(int E,int T){
     return 1;
 
 }
-int Generating_keys(int q,int p){
-    int n,T;
+int Generating_keys(int q,int p,int* n,int* T){
     if(prime(p)==1 || prime(q)==1){
         printf("the number you just antered is not prime try another one ");
     }
-    n=q*p; //semi prime number//
-    T=(p-1)*(q-1);//this totient is especially for semi prime numbers such that n=p*q with q!=p and q&p are prime numbers //
-    return T,n;
+    *n=q*p; //semi prime number//
+    *T=(p-1)*(q-1);//this totient is especially for semi prime numbers such that n=p*q with q!=p and q&p are prime numbers //
 }
-void Encrypt(int ascii[40],int ciphertext[40],int E,int T,int n){
+void Encrypt(int ascii[max_s],int ciphertext[max_s],int E,int T,int n){
     int i;
     if (public_key(E,T)==0){
 
-    for(i=0;i<40;i++){
+    for(i=0;i<max_s;i++){
         ciphertext[i]=((int)pow(ascii[i],E))%n;
     }
     }
-    else return 1;
 
 }
 int private_key(int E, int T,int D){
@@ -70,10 +68,10 @@ int private_key(int E, int T,int D){
     }
     return 1;
 }
-void decrypt(int ciphertext[40],int ascii[40],int D,int n,int T,int E){
+void decrypt(int ciphertext[max_s],int ascii[max_s],int D,int n,int T,int E){
     int i;
     if( private_key(E,T,D)==0){
-        for(i=0;i<40;i++){
+        for(i=0;i<max_s;i++){
             ascii[i]=((int)pow(ciphertext[i],D))%n;
         }
     }
@@ -83,9 +81,9 @@ void decrypt(int ciphertext[40],int ascii[40],int D,int n,int T,int E){
 
 
 int main(){
-    char text[40]="This is the text i want to encrypt";
+    char text[max_s]="This is the text i want to encrypt";
     int i;
-    int ascii_of_text[40];
+    int ascii_of_text[max_s];
     Ascii(text,ascii_of_text);
     for (i=0;i<40;i++){
         
