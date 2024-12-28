@@ -11,6 +11,12 @@ void Ascii(char text[40],int ascii[40]){
 
 
 }
+void Inv_Ascii(int ascii[40],char ciphertext[40]){
+int i;
+for (i=0;i<40;i++){
+    ciphertext[i]=(char)ascii[i];
+}
+}
 //verifies if the public key is prime //
 int prime(int E){
     int i;
@@ -44,40 +50,13 @@ int public_key(int E,int T){
     return 1;
 
 }
-int Generating_keys(int q,int p){
+int Generating_keys(int q,int p,int*n,int*T){
     int n,T;
     if(prime(p)==1 || prime(q)==1){
         printf("the number you just antered is not prime try another one ");
     }
-    n=q*p; //semi prime number//
-    T=(p-1)*(q-1);//this totient is especially for semi prime numbers such that n=p*q with q!=p and q&p are prime numbers //
-    return T,n;
-}
-void Encrypt(int ascii[40],int ciphertext[40],int E,int T,int n){
-    int i;
-    if (public_key(E,T)==0){
-
-    for(i=0;i<40;i++){
-        ciphertext[i]= modular_exponential_function(ascii[i],E,n);
-    }
-    }
-    else return 1;
-
-}
-int private_key(int E, int T,int D){
-    if ((D*E)%T==1){
-        return 0;
-    }
-    return 1;
-}
-void decrypt(int ciphertext[40],int ascii[40],int D,int n,int T,int E){
-    int i;
-    if( private_key(E,T,D)==0){
-        for(i=0;i<40;i++){
-            ascii[i]=modular_exponential_function(ciphertext[i],D,n);
-        }
-    }
-
+    *n=q*p; //semi prime number//
+    *T=(p-1)*(q-1);//this totient is especially for semi prime numbers such that n=p*q with q!=p and q&p are prime numbers //
 
 }
 /*I created this version of the algorithm to calculate the modular exponentiation function 
@@ -98,6 +77,30 @@ int modular_exponential_function (int Message_or_ciphertext, int K,int n){
     return mod;
 }
 
+void Encrypt(int ascii[40],int ciphertext[40],int E,int T,int n){
+    int i;
+    if (public_key(E,T)==0){
+
+    for(i=0;i<40;i++){
+        ciphertext[i]= modular_exponential_function(ascii[i],E,n);
+    }
+    }
+
+}
+int private_key(int E, int T,int D){
+    if ((D*E)%T==1){
+        return 0;
+    }
+    return 1;
+}
+void decrypt(int ciphertext[40],int ascii[40],int D,int n,int T,int E){
+    int i;
+    if( private_key(E,T,D)==0){
+        for(i=0;i<40;i++){
+            ascii[i]=modular_exponential_function(ciphertext[i],D,n);
+        }
+    }
+}
 
 int main(){
     char text[40]="This is the text i want to encrypt";
