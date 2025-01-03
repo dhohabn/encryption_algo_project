@@ -8,9 +8,9 @@
                 "-fdiagnostics-color=always",
                 "-g",
                 "-I",
-                "C:\\Users\\mchel\\OneDrive\\Desktop\\sdl2\\SDL2-2.30.10\\x86_64-w64-mingw32\\include\\SDL2",
+                "C:\\Users\\mchel\\OneDrive\\Desktop\\include\\SDL2",
                 "-I",
-                "C:\\Users\\mchel\\OneDrive\\Desktop\\New folder\\sdl2 ttf\\SDL2_ttf-2.22.0\\x86_64-w64-mingw32\\include\\SDL2",
+                "C:\\Users\\mchel\\OneDrive\\Desktop\\SDL2_ttf",
                 "-L",
                 "C:\\Users\\mchel\\OneDrive\\Desktop\\sdl2\\SDL2-2.30.10\\x86_64-w64-mingw32\\lib",
                 "-L",
@@ -21,7 +21,7 @@
                 "-lSDL2",
                 "-lSDL2_ttf",
                 "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe"
+                "${fileDirname}\\visualization.exe"
             ],
             "options": {
                 "cwd": "${fileDirname}"

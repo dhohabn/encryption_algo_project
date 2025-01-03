@@ -4,8 +4,8 @@
       "name": "windows-gcc-x64",
       "includePath": [
         "${workspaceFolder}/**",
-        "C:\\Users\\mchel\\OneDrive\\Desktop\\New folder\\sdl2 ttf\\SDL2_ttf-2.22.0\\x86_64-w64-mingw32\\include\\SDL2",
-        "C:\\Users\\mchel\\OneDrive\\Desktop\\sdl2\\SDL2-2.30.10\\x86_64-w64-mingw32\\include\\SDL2"
+        "C:\\Users\\mchel\\OneDrive\\Desktop\\SDL2_ttf",
+        "C:\\Users\\mchel\\OneDrive\\Desktop\\include\\SDL2"
       ],
       "compilerPath": "C:\\Users\\mchel\\OneDrive\\Desktop\\New folder\\bin\\gcc.exe",
       "cStandard": "${default}",
@@ -13,13 +13,14 @@
       "intelliSenseMode": "windows-gcc-x64",
       "compilerArgs": [
         "-I",
-        "C:\\Users\\mchel\\OneDrive\\Desktop\\sdl2\\SDL2-2.30.10\\x86_64-w64-mingw32\\include\\SDL2",
+        "C:\\Users\\mchel\\OneDrive\\Desktop\\include\\SDL2",
         "-I",
-        "C:\\Users\\mchel\\OneDrive\\Desktop\\New folder\\sdl2 ttf\\SDL2_ttf-2.22.0\\x86_64-w64-mingw32\\include\\SDL2",
+        "C:\\Users\\mchel\\OneDrive\\Desktop\\SDL2_ttf",
         "-L",
         "C:\\Users\\mchel\\OneDrive\\Desktop\\sdl2\\SDL2-2.30.10\\x86_64-w64-mingw32\\lib",
         "-L",
         "C:\\Users\\mchel\\OneDrive\\Desktop\\New folder\\sdl2 ttf\\SDL2_ttf-2.22.0\\x86_64-w64-mingw32\\lib",
+        "-lmingw32",
         "-lSDL2",                            
         "-lSDL2_ttf" 
       ]

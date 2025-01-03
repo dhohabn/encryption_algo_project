@@ -1,174 +1,241 @@
-
-#include <SDL2/SDL.h>
-#include <SDL_ttf.h>
-#include <stdbool.h>
+#include <SDL.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <time.h>  // Include time.h for srand() and time()
-TTF_Font* font = NULL;
-SDL_Window* window = NULL;
-SDL_Renderer* renderer = NULL;
-#define WINDOW_WIDTH 800
-#define WINDOW_HEIGHT 600
+#include <stdbool.h>
+#include <SDL_ttf.h>
+#define max_s 50
+int main(int argc, char* argv[]) {
+    int E,D;
+    char text[max_s]="This is the text i want to encrypt";
+    printf("enter public key");
+    scanf("%d",&E);
+    printf("enter private key");
+    scanf("%d",&D);
 
+    char numberTextE[50];
+    char numberTextD[50];
+    sprintf(numberTextE, "E: %d", E);
+    sprintf(numberTextD, "D: %d", D);
 
-
-// Function to compute the greatest common divisor (GCD)
-int gcd(int a, int b) {
-    if (b == 0) return a;
-    return gcd(b, a % b);
-}
-
-
-// Function to find modular inverse
-int modInverse(int e, int phi) {
-    for (int d = 1; d < phi; d++) {
-        if ((e * d) % phi == 1) return d;
+    /*initializing SDL*/
+    if (SDL_Init(SDL_INIT_VIDEO) < 0 || TTF_Init() < 0) {
+        SDL_Log("SDL initialization failed: %s", SDL_GetError());
+        return 1;
     }
-    return -1;
-}
-
-
-// Function to compute power (m^e) % n
-long long modExp(long long m, long long e, long long n) {
-    long long result = 1;
-    m = m % n;
-    while (e > 0) {
-        if (e % 2 == 1)
-            result = (result * m) % n;
-        e = e >> 1;
-        m = (m * m) % n;
+    /*initializing ttf*/
+     if (TTF_Init() < 0) {
+        printf("TTF initialization failed: %s\n", TTF_GetError());
+        SDL_Quit();
+        return 1;
     }
-    return result;
-}
-
-
-// Function to generate a random prime number
-int isPrime(int num) {
-    if (num <= 1) return 0;
-    for (int i = 2; i <= sqrt(num); i++) {
-        if (num % i == 0) return 0;
+    // Create a window
+    SDL_Window* window = SDL_CreateWindow("RAS visualization", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1000, 700, SDL_WINDOW_SHOWN);
+    if (!window) {
+        SDL_Log("Window creation failed: %s", SDL_GetError());
+        SDL_Quit();
+        return 1;
     }
-    return 1;
-}
 
 
-int generatePrime() {
-    int num;
-    do {
-        num = rand() % 100 + 50; // Generate a random number between 50 and 150
-    } while (!isPrime(num));
-    return num;
-}
-
-
-// RSA key generation
-void generateRSAKeys(int* e, int* d, int* n) {
-    srand(time(NULL));  // Use time to seed the random number generator
-
-
-    int p = generatePrime();
-    int q = generatePrime();
-
-
-    *n = p * q;
-    int phi = (p - 1) * (q - 1);
-
-
-    // Choose e such that 1 < e < phi(n) and gcd(e, phi) = 1
-    *e = 2;
-    while (gcd(*e, phi) != 1) (*e)++;
-
-
-    // Compute d such that (d * e) % phi = 1
-    *d = modInverse(*e, phi);
-}
-
-
-// Function to render text using simple SDL (rectangles, lines, etc.)
-void renderText(SDL_Renderer* renderer, const char* text, int x, int y) {
-    // Simple rendering: display text as small rectangles (basic for visualization)
-    SDL_Rect rect = { x, y, 100, 30 };  // Just a placeholder for text
-    SDL_SetRenderDrawColor(renderer, 128,0,128,255); // White color
-    SDL_RenderFillRect(renderer, &rect);  // Draw rectangle to simulate text
-}
-
-
-// Function to render RSA visualization
-void renderRSAVisualization(int e, int d, int n, int message, long long encrypted, long long decrypted) {
-    SDL_Init(SDL_INIT_VIDEO);
-
-
-    SDL_Window* window = SDL_CreateWindow("RSA Visualization", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+    // Create a renderer
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if (!renderer) {
+        SDL_Log("Renderer creation failed: %s", SDL_GetError());
+        SDL_DestroyWindow(window); 
+        SDL_Quit();
+        return 1;
+    }
+SDL_Color white = {255, 255, 255, 255};  // White color
+SDL_Color black = {0, 0, 0, 255};        // Black color
+SDL_Color red = {255, 0, 0, 255};        // Red color
+SDL_Color green = {0, 255, 0, 255};      // Green color
+SDL_Color blue = {0, 0, 255, 255};       // Blue color
+SDL_Color yellow = {255, 255, 0, 255};   // Yellow color
+SDL_Color cyan = {0, 255, 255, 255};     // Cyan color
+SDL_Color magenta = {255, 0, 255, 255};  // Magenta color 
+SDL_Color gray = {128, 128, 128, 255};   // Gray color
+SDL_Color lightGray = {211, 211, 211, 255}; // Light gray color
+SDL_Color darkGray = {169, 169, 169, 255}; // Dark gray color
+SDL_Color orange = {255, 165, 0, 255};    // Orange color
+SDL_Color purple = {128, 0, 128, 255};    // Purple color
+SDL_Color brown = {139, 69, 19, 255};     // Brown color
+SDL_Color pink = {255, 192, 203, 255};    // Pink color
+SDL_Color lightBlue = {173, 216, 230, 255}; // Light blue color
+SDL_Color lightGreen = {144, 238, 144, 255}; // Light green color
+
+    TTF_Font* font = TTF_OpenFont("C:\\Users\\mchel\\OneDrive\\Desktop\\encryption_algo_project-main\\hadjer\\font\\consolab.ttf", 24);
+    if (!font) {
+        SDL_Log("Font loading failed: %s", TTF_GetError());
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        TTF_Quit();
+        return 1;
+        }
+    
+    SDL_Color textColorE = {255, 255, 255, 255}; // White color
+    SDL_Color textColorD = {255,255,255, 255};
+    SDL_Surface* textSurfaceE = TTF_RenderText_Solid(font, numberTextE, textColorE);
+    if (!textSurfaceE) {
+        printf("Failed to create text surface E: %s\n", TTF_GetError());
+        TTF_CloseFont(font);
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        TTF_Quit();
+        SDL_Quit();
+        return 1;
+    }
+    SDL_Surface* textSurfaceD = TTF_RenderText_Solid(font, numberTextD, textColorD);
+    if (!textSurfaceD) {
+        printf("Failed to create text surface D: %s\n", TTF_GetError());
+        SDL_FreeSurface(textSurfaceE);
+        TTF_CloseFont(font);
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        TTF_Quit();
+        SDL_Quit();
+        return 1;
+    }
+    SDL_Color textColortext = {128, 0, 128, 255}; // idk what they call this color but i's beautiful
+    SDL_Surface* textSurfacetext = TTF_RenderText_Solid(font, text, textColortext);
+    if (!textSurfacetext) {
+        printf("Failed to create text surface E: %s\n", TTF_GetError());
+        TTF_CloseFont(font);
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        TTF_Quit();
+        SDL_Quit();
+        return 1;
+    }
 
 
-    // Set background to yellow
-    SDL_SetRenderDrawColor(renderer,255,255,0,255);
-    SDL_RenderClear(renderer);
+   
+    SDL_Texture* textTextureE = SDL_CreateTextureFromSurface(renderer, textSurfaceE);
+    SDL_FreeSurface(textSurfaceE); // Free the surface after creating the texture
+    if (!textTextureE) {
+        SDL_Log("Texture creation failed: %s", SDL_GetError());
+        TTF_CloseFont(font);
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        TTF_Quit();
+        return 1;
+    }
+     SDL_Texture* textTextureD = SDL_CreateTextureFromSurface(renderer, textSurfaceD);
+    SDL_FreeSurface(textSurfaceD); // Free the surface after creating the texture
+    if (!textTextureD) {
+        SDL_Log("Texture creation failed: %s", SDL_GetError());
+        TTF_CloseFont(font);
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        TTF_Quit();
+        return 1;
+    }
+    SDL_Texture* textTexturetext = SDL_CreateTextureFromSurface(renderer, textSurfacetext);
+    SDL_FreeSurface(textSurfacetext); // Free the surface after creating the texture
+    if (!textTexturetext) {
+        SDL_Log("Texture creation failed: %s", SDL_GetError());
+        TTF_CloseFont(font);
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        SDL_Quit(); 
+        TTF_Quit();
+        return 1;
+    }
+
+    int speed = 1;
+    /*defining the rects*/
+    SDL_Rect rectE = {100, 100, 200, 100};
+    SDL_Rect rectD = {680, 100, 200, 100};
+    SDL_Rect recttext = {300,250,380,100};
+    /*defining rects text*/
+    SDL_Rect textRectE = {120, 110, 160, 80};
+    SDL_Rect textRectD = {700, 110, 160, 80};
+    SDL_Rect textRecttext={325,260,330,80}; 
 
 
-    // Display RSA key information and visualization (just as a basic example)
-    char text[256];
-    sprintf(text, "Public Key: e = %d, n = %d", e, n);
-    renderText(renderer, text, 50, 50);
+    // Main loop
+    bool quit = false;
+    SDL_Event event;
+    while (!quit) {
+        while (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_QUIT:
+                    quit = true;
+                    break;
+                default: 
+                    break;
+            }
+        }
+       
 
 
-    sprintf(text, "Private Key: d = %d, n = %d", d, n);
-    renderText(renderer, text, 50, 100);
+        // Clear the screen
+        SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);/*background cleared with white color */
+        SDL_RenderClear(renderer);
 
 
-    sprintf(text, "Message: %d", message);
-    renderText(renderer, text, 50, 150);
+        SDL_SetRenderDrawColor(renderer,90, 34, 139, 40);
+        SDL_RenderFillRect(renderer, &rectE);
 
 
-    sprintf(text, "Encrypted: %lld", encrypted);
-    renderText(renderer, text, 50, 200);
+        SDL_SetRenderDrawColor(renderer,90, 34, 139, 40);
+        SDL_RenderFillRect(renderer, &rectD);
+
+ 
+        SDL_SetRenderDrawColor(renderer,0, 255, 0, 255); 
+        SDL_RenderFillRect(renderer, &recttext);
 
 
-    sprintf(text, "Decrypted: %lld", decrypted);
-    renderText(renderer, text, 50, 250);
 
 
-    // Example of visualization: Draw a simple box for RSA steps
-    SDL_SetRenderDrawColor(renderer, 128,0,128,255);  // purple color
-    SDL_Rect rsaBox = { 200, 300, 400, 100 };  // Example box for encryption process
-    SDL_RenderDrawRect(renderer, &rsaBox);
+        SDL_RenderCopy(renderer, textTextureE, NULL, &textRectE);
+        SDL_RenderCopy(renderer, textTextureD, NULL, &textRectD);
+        SDL_RenderCopy(renderer, textTexturetext, NULL, &textRecttext);
+
+        /*i want to move the rectengle text horizontally*/
+        recttext.x -= speed;
+        textRecttext.x -= speed;
+        if (recttext.x<=100){
+            speed=0;
+        }
 
 
-    SDL_RenderPresent(renderer);
+
+        
 
 
-    SDL_Delay(50000); // Wait for 5 seconds before closing
+
+ 
+ 
 
 
-    // Cleanup
+
+
+        // Present the renderer
+        SDL_RenderPresent(renderer);
+       
+
+
+        // Delay to control frame rate
+        SDL_Delay(16); // Approximately 60 frames per second
+       
+    }
+
+
+    // Cleanup and exit
+    SDL_DestroyTexture(textTexturetext);
+    SDL_DestroyTexture(textTextureE);
+    SDL_DestroyTexture(textTextureD);
+    TTF_CloseFont(font);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    TTF_Quit();
     SDL_Quit();
-}
-
-
-int SDL_main(int argc, char* argv[]){
-    int e, d, n,q,p;
-    q=61;
-    p=53;
-    e=17;
-    d=2753;
-    n=q*p;
-    generateRSAKeys(&e, &d, &n);
-
-
-    int message = 65; // Example message
-    long long encrypted = modExp(message, e, n);
-    long long decrypted = modExp(encrypted, d, n);
-
-
-    renderRSAVisualization(e, d, n, message, encrypted, decrypted);
 
 
     return 0;
 }
 
 
+ 

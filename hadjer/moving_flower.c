@@ -1,115 +1,114 @@
-#include <SDL2/SDL.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <SDL.h>
 #include <math.h>
+#include <stdio.h>
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
 
-float linear_regression(float w, float b, int x) {
-    return (w * x) + b;
-}
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
-void draw_line(SDL_Renderer *renderer, int x1, int y1, int x2, int y2, SDL_Color color) {
-    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-    SDL_RenderDrawLine(renderer, x1, y1, x2, y2);
-}
 
-void draw_circle(SDL_Renderer *renderer, int x, int y, int radius, SDL_Color color) {
-    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-    for (int w = 0; w < radius * 2; w++) {
-        for (int h = 0; h < radius * 2; h++) {
-            int dx = radius - w; // Horizontal offset
-            int dy = radius - h; // Vertical offset
-            if ((dx * dx + dy * dy) <= (radius * radius)) {
-                SDL_RenderDrawPoint(renderer, x + dx, y + dy);
-            }
-        }
+#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 600
+
+
+// Function to draw a flower shape
+void draw_flower(SDL_Renderer *renderer, int x, int y, int radius, int petal_count) {
+    double angle_step = 2 * M_PI / petal_count;
+    for (int i = 0; i < petal_count; ++i) {
+        double angle = i * angle_step;
+        int petal_x = x + (int)(cos(angle) * radius);
+        int petal_y = y + (int)(sin(angle) * radius);
+        SDL_RenderDrawLine(renderer, x, y, petal_x, petal_y);
     }
 }
 
-int SDL_main(int argc, char* argv[]) {
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        printf("SDL_Init Error: %s\n", SDL_GetError());
+
+int main(int argc, char *argv[]) {
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
         return 1;
     }
 
-    SDL_Window *win = SDL_CreateWindow("Linear Regression Visualization", 100, 100, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-    if (win == NULL) {
-        printf("SDL_CreateWindow Error: %s\n", SDL_GetError());
+
+    SDL_Window *window = SDL_CreateWindow("Moving Flower",
+                                          SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                                          WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+    if (!window) {
+        printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
         SDL_Quit();
         return 1;
     }
 
-    SDL_Renderer *renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if (renderer == NULL) {
-        SDL_DestroyWindow(win);
-        printf("SDL_CreateRenderer Error: %s\n", SDL_GetError());
+
+    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if (!renderer) {
+        printf("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
+        SDL_DestroyWindow(window);
         SDL_Quit();
         return 1;
     }
 
-    float t1[5], t2[5];
-    int y;
-    printf("Enter the values for the first table:\n");
-    for (int i = 0; i < 5; i++) {
-        scanf("%f", &t1[i]);
-    }
 
-    printf("Enter the values for the second table:\n");
-    for (int i = 0; i < 5; i++) {
-        scanf("%f", &t2[i]);
-    }
+    int flower_x = WINDOW_WIDTH / 2;
+    int flower_y = WINDOW_HEIGHT / 2;
+    int radius = 100;
+    int petal_count = 8;
+    int dx = 2, dy = 2;
 
-    printf("Enter the prediction value (y):\n");
-    scanf("%d", &y);
 
-    int running = 1;
-    SDL_Event event;
+    SDL_Event e;
+    int quit = 0;
 
-    while (running) {
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                running = 0;
+
+    while (!quit) {
+        while (SDL_PollEvent(&e) != 0) {
+            if (e.type == SDL_QUIT) {
+                quit = 1;
             }
         }
 
+
+        // Update flower position
+        flower_x += dx;
+        flower_y += dy;
+
+
+        // Check for boundary collisions and reverse direction if needed
+        if (flower_x + radius >= WINDOW_WIDTH || flower_x - radius <= 0) {
+            dx = -dx;
+        }
+        if (flower_y + radius >= WINDOW_HEIGHT || flower_y - radius <= 0) {
+            dy = -dy;
+        }
+
+
+        // Clear the screen with black
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-        // Define colors
-        SDL_Color white = {255, 255, 255, 255};
-        SDL_Color red = {255, 0, 0, 255};
 
-        // Draw axes
-        draw_line(renderer, 50, SCREEN_HEIGHT / 2, SCREEN_WIDTH - 50, SCREEN_HEIGHT / 2, white); // X-axis
-        draw_line(renderer, SCREEN_WIDTH / 2, 50, SCREEN_WIDTH / 2, SCREEN_HEIGHT - 50, white); // Y-axis
+        // Set color for flower (Yellow)
+        SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
 
-        // Plot points and regression line
-        for (int i = 0; i < 5; i++) {
-            float fx = linear_regression(t1[i], t2[i], y);
 
-            // Scale values to fit the screen
-            int x = (int)(t1[i] * 10) + SCREEN_WIDTH / 2;
-            int y_actual = SCREEN_HEIGHT / 2 - (int)(t2[i] * 10);
-            int y_pred = SCREEN_HEIGHT / 2 - (int)(fx * 10);
+        // Draw flower
+        draw_flower(renderer, flower_x, flower_y, radius, petal_count);
 
-            // Draw actual point
-            draw_circle(renderer, x, y_actual, 5, red);
 
-            // Draw prediction point
-            draw_circle(renderer, x, y_pred, 5, white);
-
-            // Draw line from actual to predicted
-            draw_line(renderer, x, y_actual, x, y_pred, white);
-        }
-
+        // Present the renderer
         SDL_RenderPresent(renderer);
+
+
+        // Delay to control frame rate
+        SDL_Delay(16);  // ~60 FPS
     }
 
+
     SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(win);
+    SDL_DestroyWindow(window);
     SDL_Quit();
+
 
     return 0;
 }

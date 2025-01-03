@@ -2,14 +2,40 @@
     "version": "0.2.0",
     "configurations": [
         {
+
+        "name": "Launch SDL Program",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceFolder}/visualization.exe", // Path to the compiled executable
+        "args": [
+            "-I",
+            "C:\\Users\\mchel\\OneDrive\\Desktop\\include\\SDL2",
+            "-I",
+            "C:\\Users\\mchel\\OneDrive\\Desktop\\SDL2_ttf",
+            "-L",
+            "C:\\Users\\mchel\\OneDrive\\Desktop\\sdl2\\SDL2-2.30.10\\x86_64-w64-mingw32\\lib",
+            "-L",
+            "C:\\Users\\mchel\\OneDrive\\Desktop\\New folder\\sdl2 ttf\\SDL2_ttf-2.22.0\\x86_64-w64-mingw32\\lib",
+            "-lmingw32",
+            "-lSDL2",                            
+            "-lSDL2_ttf" 
+        ], 
+        "stopAtEntry": false,
+        "cwd": "${workspaceFolder}", // Current working directory
+        "environment": [],
+        "externalConsole": true, // Opens an external console for SDL
+        "MIMode": "gdb",
+        "miDebuggerPath": "C:\\Users\\mchel\\OneDrive\\Desktop\\New folder\\bin\\gdb.exe", 
+        "setupCommands": [
+        {
             "name": "C/C++ Runner: Debug Session",
             "type": "cppdbg",
             "request": "launch",
             "args": [],
             "stopAtEntry": false,
             "externalConsole": true,
-            "cwd": "c:/Users/dell/Desktop/encryption_algo_project",
-            "program": "c:/Users/dell/Desktop/encryption_algo_project/build/Debug/outDebug",
+            "cwd": "c:/Users/dell/Desktop/encryption_algo_project-main",
+            "program": "c:/Users/dell/Desktop/encryption_algo_project-main/build/Debug/outDebug",
             "MIMode": "gdb",
             "miDebuggerPath": "gdb",
             "setupCommands": [
@@ -24,7 +50,7 @@
             "name": "C/C++: gcc.exe build and debug active file",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+            "program": "${fileDirname}\\visualization.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
@@ -46,5 +72,7 @@
             ],
             "preLaunchTask": "C/C++: gcc.exe build active file"
         }
+    ]
+}
     ]
 }

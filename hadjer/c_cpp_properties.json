@@ -1,0 +1,30 @@
+{
+  "configurations": [
+    {
+      "name": "windows-gcc-x64",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "C:\\Users\\mchel\\OneDrive\\Desktop\\encryption_algo_project-main\\hadjer\\include\\SDL2",
+        "C:\\Users\\mchel\\OneDrive\\Desktop\\encryption_algo_project-main\\hadjer\\include\\SDL2"
+      ],
+      "compilerPath": "C:\\Users\\mchel\\OneDrive\\Desktop\\New folder\\bin\\gcc.exe",
+      "cStandard": "${default}",
+      "cppStandard": "${default}",
+      "intelliSenseMode": "windows-gcc-x64",
+      "compilerArgs": [
+        "-I",
+        "C:\\Users\\mchel\\OneDrive\\Desktop\\encryption_algo_project-main\\hadjer\\include\\SDL2",
+        "-I",
+        "C:\\Users\\mchel\\OneDrive\\Desktop\\encryption_algo_project-main\\hadjer\\include\\SDL2",
+        "-L",
+        "C:\\Users\\mchel\\OneDrive\\Desktop\\encryption_algo_project-main\\hadjer\\lib",
+        "-L",
+        "C:\\Users\\mchel\\OneDrive\\Desktop\\encryption_algo_project-main\\hadjer\\lib",
+        "-lmingw32",
+        "-lSDL2",                            
+        "-lSDL2_ttf" 
+      ]
+    }
+  ],
+  "version": 4
+}
