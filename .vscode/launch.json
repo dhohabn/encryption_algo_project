@@ -2,14 +2,34 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Build and Run C/C++ ",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": true,
+      "cwd": "c:/Users/dell/Desktop/encryption_algo_project/output",
+      "program": "c:/Users/dell/Desktop/encryption_algo_project/output/${fileBasenameNoExtension}.exe",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ],
+      "preLaunchTask": "Build C File"
+    },
+    {
       "name": "C/C++ Runner: Debug Session",
       "type": "cppdbg",
       "request": "launch",
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/dell/Desktop/encryption_algo_project",
-      "program": "c:/Users/dell/Desktop/encryption_algo_project/build/Debug/outDebug",
+      "cwd": "c:/Users/dell/Desktop/encryption_algo_project/output",
+      "program": "c:/Users/dell/Desktop/encryption_algo_project/output/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

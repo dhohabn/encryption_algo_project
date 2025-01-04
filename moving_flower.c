@@ -1,4 +1,4 @@
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <math.h>
 
 #ifndef M_PI
@@ -19,7 +19,7 @@ void draw_flower(SDL_Renderer *renderer, int x, int y, int radius, int petal_cou
     }
 }
 
-int main(int argc, char *argv[]) {
+int SDL_main(int argc, char *argv[]) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
         return 1;
