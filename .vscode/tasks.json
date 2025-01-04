@@ -1,0 +1,30 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cppbuild",
+			"label": "C/C++: gcc.exe build active file",
+			"command": "C:\\MinGW\\bin\\gcc.exe",
+			"args": [
+				"-fdiagnostics-color=always",
+				"-g",
+				"-I",
+				"C:\\Users\\dell\\Desktop\\encryption_algo_project\\include",
+				"-L",
+				"C:\\Users\\dell\\Desktop\\encryption_algo_project\\lib",
+				"-I",
+				"C:\\Users\\dell\\Desktop\\encryption_algo_project\\include",
+				"-L",
+				"C:\\Users\\dell\\Desktop\\encryption_algo_project\\lib",
+				"C:\\Users\\dell\\Desktop\\encryption_algo_project\\output\\flower.c",
+				"-lmingw32",
+				"-lSDL2main",
+				"-lSDL2",
+				"-lSDL2_ttf",
+				"-o",
+				"C:/Users/dell/Desktop/encryption_algo_project/output/flower.exe"
+			]
+		}
+		
+	]
+}
