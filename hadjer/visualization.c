@@ -4,6 +4,8 @@
 #include <SDL_ttf.h>
 #include <math.h>
 #define max_s 50
+#define WINDOW_WIDTH 1000
+#define WINDOW_HEIGHT 700
 //this is RAS algorithm:"R"avist-"S"hemir-"A"delman// 
 void Ascii(char text[max_s],int ascii[max_s]){
     int i;
@@ -188,8 +190,6 @@ int main(int argc, char* argv[]) {
         SDL_Quit();
         return 1;
     }
-
-
     /* Create a renderer*/
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     if (!renderer) {
@@ -440,9 +440,6 @@ SDL_Color lightGreen = {144, 238, 144, 255}; // Light green color
 
 
 
-   
-
-
 
 
     int speed = 5;
@@ -484,6 +481,8 @@ SDL_Color lightGreen = {144, 238, 144, 255}; // Light green color
                     break;
             }
         }
+    
+
        
 
 
@@ -656,9 +655,8 @@ SDL_Color lightGreen = {144, 238, 144, 255}; // Light green color
        
 
 
-        // Delay to control frame rate
-        SDL_Delay(16); // Approximately 60 frames per second
-       
+        // Delay to control 
+        SDL_Delay(50); 
     }
 
 
