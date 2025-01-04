@@ -33,3 +33,16 @@ void draw_circle(SDL_Renderer *r, int x, int y, int rad, SDL_Color c) {
         }
     }
 }
+
+int main(int argc, char *argv[]) {
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        printf("SDL Error: %s\n", SDL_GetError());
+        return 1;
+    }
+
+    SDL_Window *win = SDL_CreateWindow("GM Visualization", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, W, H, SDL_WINDOW_SHOWN);
+    if (!win) {
+        printf("Window Error: %s\n", SDL_GetError());
+        SDL_Quit();
+        return 1;
+    }
