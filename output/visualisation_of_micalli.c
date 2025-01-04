@@ -20,3 +20,16 @@ int nqres(int n) {
         }
     }
 }
+
+void draw_circle(SDL_Renderer *r, int x, int y, int rad, SDL_Color c) {
+    SDL_SetRenderDrawColor(r, c.r, c.g, c.b, c.a);
+    for (int w = 0; w < rad * 2; w++) {
+        for (int h = 0; h < rad * 2; h++) {
+            int dx = rad - w;
+            int dy = rad - h;
+            if ((dx * dx + dy * dy) <= (rad * rad)) {
+                SDL_RenderDrawPoint(r, x + dx, y + dy);
+            }
+        }
+    }
+}
